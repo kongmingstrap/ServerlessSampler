@@ -1,0 +1,9 @@
+*.DS_Store
+/.envrc
+/.idea/
+/tmp/
+__pycache__/
+.cache/
+*.pyc
+.coverage
+template.yml
