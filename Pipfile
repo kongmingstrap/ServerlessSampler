@@ -1,0 +1,20 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[dev-packages]
+
+ipython = "*"
+
+
+[packages]
+
+"boto3" = "*"
+pytest = "*"
+"flake8" = "*"
+"flake8-quotes" = "*"
+awscli = "*"
+pytest-cov = "*"
