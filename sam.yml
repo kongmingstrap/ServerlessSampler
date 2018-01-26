@@ -1,0 +1,44 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  Env:
+    Type: String
+
+Resources:
+  PostUsersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub post-users
+      CodeUri: src/handlers/post_users
+      Handler: index.handler
+      Runtime: python3.6
+      AutoPublishAlias: !Ref Env
+      Timeout: 10
+      MemorySize: 128
+      Role:
+        Fn::ImportValue: !Sub lambda-iam-PostUsersRoleArn
+      Environment:
+        Variables:
+          USER_ATTENDANCES_TABLE_NAME: user_attendances
+      Events:
+        Schedule:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 * * * ? *)
+  PutAttendanceFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub put-attendance
+      CodeUri: src/handlers/put_attendance
+      Handler: index.handler
+      Runtime: python3.6
+      AutoPublishAlias: !Ref Env
+      Timeout: 10
+      MemorySize: 128
+      Role:
+        Fn::ImportValue: !Sub lambda-iam-PutAttendanceRoleArn
+      Environment:
+        Variables:
+          USER_TABLE_NAME: user_attendances
