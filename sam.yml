@@ -1,44 +1,64 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
+Description: Sempler Serverless Application Model
 Transform: AWS::Serverless-2016-10-31
 
-Parameters:
-  Env:
-    Type: String
-
 Resources:
-  PostUsersFunction:
+  PutAttendanceFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub post-users
-      CodeUri: src/handlers/post_users
+      FunctionName: attendance
+      CodeUri: src/handlers/attendance
       Handler: index.handler
       Runtime: python3.6
-      AutoPublishAlias: !Ref Env
       Timeout: 10
       MemorySize: 128
-      Role:
-        Fn::ImportValue: !Sub lambda-iam-PostUsersRoleArn
+      Role: !ImportValue sampler-iam-PutAttendanceRoleArn
       Environment:
         Variables:
-          USER_ATTENDANCES_TABLE_NAME: user_attendances
+          USER_TABLE_NAME: !ImportValue sampler-dynamodb-UserTableName
+      Events:
+        PutResource:
+          Type: Api
+          Properties:
+            Path: /attendance/{userId}
+            Method: put
+
+  SummaryUsersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: summary_users
+      CodeUri: src/handlers/summary_users
+      Handler: index.handler
+      Runtime: python3.6
+      Timeout: 10
+      MemorySize: 128
+      Role: !ImportValue sampler-iam-SummaryUsersRoleArn
+      Environment:
+        Variables:
+          USER_TABLE_NAME: !ImportValue sampler-dynamodb-UserTableName
+          ATTENDANCE_DATA_BUCKET_NAME: !ImportValue sampler-s3-AttendanceDataBucketName
       Events:
         Schedule:
           Type: Schedule
           Properties:
             Schedule: cron(0 * * * ? *)
-  PutAttendanceFunction:
+
+  ContributeAttendancesFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub put-attendance
-      CodeUri: src/handlers/put_attendance
+      FunctionName: !Sub contribute_attendances
+      CodeUri: src/handlers/contribute_attendances
       Handler: index.handler
       Runtime: python3.6
-      AutoPublishAlias: !Ref Env
       Timeout: 10
       MemorySize: 128
-      Role:
-        Fn::ImportValue: !Sub lambda-iam-PutAttendanceRoleArn
+      Role: !ImportValue sampler-iam-ContributeAttendancesRoleArn
       Environment:
         Variables:
-          USER_TABLE_NAME: user_attendances
+          ATTENDANCE_DATA_BUCKET_NAME: !ImportValue sampler-s3-AttendanceDataBucketName
+      Events:
+        Schedule:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 * * * ? *)

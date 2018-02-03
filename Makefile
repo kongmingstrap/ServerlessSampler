@@ -6,6 +6,15 @@ localstack-up:
 localstack-stop:
 	@docker-compose stop localstack
 
+lint:
+	@python -m flake8 src
+
+validate:
+	@aws cloudformation validate-template \
+		--template-body file://sam.yml
+
 .PHONY: \
 	localstack-up \
-	localstack-down
+	localstack-down \
+	lint \
+	validate
