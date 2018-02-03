@@ -18,6 +18,6 @@ class PutReportRepository(object):
             bucket_name = os.environ['ATTENDANCE_DATA_BUCKET_NAME']
             json_key = 'report.json'
             object = self._s3.Object(bucket_name, json_key)
-            object.put(Body = json.dumps(report))
+            object.put(Body=json.dumps(report))
         except Exception as e:
             print('Exception: {e}'.format(e))
