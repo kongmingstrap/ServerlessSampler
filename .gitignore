@@ -7,3 +7,7 @@ __pycache__/
 *.pyc
 .coverage
 template.yml
+.python-version
+cfn/.envrc
+cfn/.python-version
+cfn/node_modules/
