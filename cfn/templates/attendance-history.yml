@@ -1,0 +1,79 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Template to store attendance data to S3
+
+Resources:
+  AttendanceDataStream:
+    Type: AWS::Kinesis::Stream
+    Properties:
+      Name: attendance_data_stream
+      RetentionPeriodHours: 24
+      ShardCount: 1
+
+  AttendanceDataFirehose:
+    Type: AWS::KinesisFirehose::DeliveryStream
+    Properties:
+      DeliveryStreamName: attendance_data_firehose
+      DeliveryStreamType: KinesisStreamAsSource
+      KinesisStreamSourceConfiguration:
+        KinesisStreamARN: !GetAtt AttendanceDataStream.Arn
+        RoleARN: !GetAtt AttendanceDataSourceRole.Arn
+      ExtendedS3DestinationConfiguration:
+        BucketARN: !ImportValue sampler-s3-AttendanceDataBucketArn
+        BufferingHints:
+          IntervalInSeconds: 60
+          SizeInMBs: 50
+        CompressionFormat: UNCOMPRESSED
+        Prefix: attendance/
+        RoleARN: !GetAtt AttendanceDataFirehoseDeliveryRole.Arn
+
+  AttendanceDataSourceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: attendance-data-source-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: firehose.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: attendance-data-source-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - kinesis:DescribeStream
+                  - kinesis:GetShardIterator
+                  - kinesis:GetRecords
+                Resource: !GetAtt AttendanceDataStream.Arn
+
+  AttendanceDataFirehoseDeliveryRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: attendance-data-firehose-delivery-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: firehose.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: attendance-data-firehose-delivery-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:AbortMultipartUpload
+                  - s3:GetBucketLocation
+                  - s3:GetObject
+                  - s3:ListBucket
+                  - s3:ListBucketMultipartUploads
+                  - s3:PutObject
+                Resource: !Sub
+                  - ${AttendanceDataBucketArn}/*
+                  - {AttendanceDataBucketArn: !ImportValue sampler-s3-AttendanceDataBucketArn}
