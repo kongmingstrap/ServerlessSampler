@@ -1,0 +1,115 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: IAM Stack
+
+Resources:
+  SAMDeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: sam-deploy-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: cloudformation.amazonaws.com
+            Action: sts:AssumeRole
+      Path: !Sub /${AWS::StackName}/
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+
+  PutAttendanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: sampler-put-attendance-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Path: !Sub /${AWS::StackName}/
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: sampler-put-attendance-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                Resource: "*"
+
+  SummaryUsersRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: sampler-summary-users-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Path: !Sub /${AWS::StackName}/
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: sampler-summary-users-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - s3:AbortMultipartUpload
+                  - s3:GetBucketLocation
+                  - s3:GetObject
+                  - s3:ListBucket
+                  - s3:ListBucketMultipartUploads
+                  - s3:PutObject
+                Resource: "*"
+
+  ContributeAttendancesRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: sampler-contribute-attendances-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Path: !Sub /${AWS::StackName}/
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: sampler-contribute-attendances-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetBucketLocation
+                  - s3:GetObject
+                Resource: "*"
+
+Outputs:
+  PutAttendanceRoleArn:
+    Value: !GetAtt PutAttendanceRole.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-PutAttendanceRoleArn
+  SummaryUsersRoleArn:
+    Value: !GetAtt SummaryUsersRole.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-SummaryUsersRoleArn
+  ContributeAttendancesRoleArn:
+    Value: !GetAtt ContributeAttendancesRole.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-ContributeAttendancesRoleArn
+  SAMDeployRoleArn:
+    Value: !GetAtt SAMDeployRole.Arn
