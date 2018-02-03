@@ -1,0 +1,52 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: S3 Stack
+
+Resources:
+  SAMArtifactBucket:
+    DeletionPolicy: Retain
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub sampler-sam-artifacts-${AWS::AccountId}-${AWS::Region}
+
+  ConfigurationBucket:
+    DeletionPolicy: Retain
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub sampler-configuration-${AWS::AccountId}-${AWS::Region}
+
+  AttendanceDataBucket:
+    DeletionPolicy: Retain
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub sampler-attendance-data-${AWS::AccountId}-${AWS::Region}
+
+  HistoryDataBucket:
+    DeletionPolicy: Retain
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub sampler-history-data-${AWS::AccountId}-${AWS::Region}
+
+Outputs:
+  SAMArtifactBucketName:
+    Value: !Ref SAMArtifactBucket
+  ConfigurationBucketName:
+    Value: !Ref ConfigurationBucket
+    Export:
+      Name: !Sub ${AWS::StackName}-ConfigurationBucketName
+  AttendanceDataBucketName:
+    Value: !Ref AttendanceDataBucket
+    Export:
+      Name: !Sub ${AWS::StackName}-AttendanceDataBucketName
+  AttendanceDataBucketArn:
+    Value: !GetAtt AttendanceDataBucket.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-AttendanceDataBucketArn
+  HistoryDataBucketName:
+    Value: !Ref HistoryDataBucket
+    Export:
+      Name: !Sub ${AWS::StackName}-HistoryDataBucketName
+  HistoryDataBucketArn:
+    Value: !GetAtt HistoryDataBucket.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-HistoryDataBucketArn
