@@ -10,10 +10,12 @@ class UserFactory(object):
         :param event:
         :return:
         """
+
         body = event.get('body')
         dict = json.loads(body)
         user_model = User(
             dict.get('user_id'),
             dict.get('place'),
             dict.get('attendance'))
+
         return user_model

@@ -2,19 +2,17 @@ import os
 import boto3
 
 
-dynamodb = boto3.resource('dynamodb')
-
-
 class UsersRepository(object):
     def __init__(self):
-        self._dynamodb = dynamodb
+        self.dynamodb = boto3.resource('dynamodb')
 
     def fetchUsers(self):
         """
         put table
         """
+
         try:
-            table = self._dynamodb.Table(os.environ['USER_TABLE_NAME'])
+            table = self.dynamodb.Table(os.environ['USER_TABLE_NAME'])
             response = table.scan()
             users = response.get('Items')
 

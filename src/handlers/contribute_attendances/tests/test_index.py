@@ -1,6 +1,6 @@
-import pytest
-
 import index
+from fetch_report_service import FetchReportService
+from post_message_service import PostMessageService
 
 
 class TestIndex(object):
@@ -8,4 +8,8 @@ class TestIndex(object):
         """
         normal test
         """
-        assert True
+
+        monkeypatch.setattr(FetchReportService, 'fetch_report', lambda x: x)
+        monkeypatch.setattr(PostMessageService, 'post_message', lambda *x: {})
+
+        index.handler({}, {})

@@ -4,8 +4,15 @@ from post_message_service import PostMessageService
 
 
 class TestPostMessageService(object):
-    def test_normal(self, monkeypatch):
+    @pytest.mark.parametrize(
+        'report', [
+            ({
+                'UserId': '0001'
+            })
+        ])
+    def test_normal(self, report, monkeypatch):
         """
         normal test
         """
-        assert True
+
+        PostMessageService().post_message(report)

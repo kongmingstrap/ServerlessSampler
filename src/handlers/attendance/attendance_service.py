@@ -8,4 +8,5 @@ class AttendanceService(object):
         :param user:
         :return:
         """
-        AttendanceRepository().put_user(user)
+
+        AttendanceRepository().put_user(user.user_data())

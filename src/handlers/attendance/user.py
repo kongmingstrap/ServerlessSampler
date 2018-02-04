@@ -8,9 +8,11 @@ class User(object):
         """
         user data dictonary
         """
+
         body = {
             'UserId': self.user_id,
             'Attendance': self.attendance,
             'Place': self.place
         }
+
         return body

@@ -5,4 +5,5 @@ class PostMessageService(object):
         :param user:
         :return:
         """
+
         print('message: {report}'.format(report=report))

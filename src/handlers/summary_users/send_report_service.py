@@ -8,4 +8,5 @@ class SendReportService(object):
         :param user:
         :return:
         """
+
         PutReportRepository().put_report(report)

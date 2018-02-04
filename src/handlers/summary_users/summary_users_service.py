@@ -8,5 +8,7 @@ class SummaryUsersService(object):
         :param user:
         :return:
         """
+
         users = UsersRepository().fetchUsers()
+
         return users

@@ -4,8 +4,18 @@ from attendance_repository import AttendanceRepository
 
 
 class TestAttendanceRepository(object):
-    def test_normal(self, monkeypatch):
+    @pytest.mark.usefixtures('create_user_table')
+    @pytest.mark.parametrize(
+        'data', [
+            ({
+                'UserId': '0001'
+            })
+        ])
+    def test_normal(self, data, dynamodb, monkeypatch):
         """
         normal test
         """
-        assert True
+
+        repository = AttendanceRepository()
+        repository.dynamodb = dynamodb
+        repository.put_user(data)

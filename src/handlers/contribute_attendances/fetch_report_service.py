@@ -8,5 +8,7 @@ class FetchReportService(object):
         :param user:
         :return:
         """
+
         report = FetchReportRepository().fetch_report()
+
         return report
