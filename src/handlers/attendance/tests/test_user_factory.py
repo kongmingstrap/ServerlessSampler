@@ -15,7 +15,7 @@ class TestUserFactory(object):
                 })
             })
         ])
-    def test_normal(self, event, monkeypatch):
+    def test_normal(self, event):
         """
         normal test
         """

@@ -25,9 +25,9 @@ class TestUser(object):
         """
 
         user_data = User(
-            data.get('user_id'),
-            data.get('place'),
-            data.get('attendance')
+            user_id=data.get('user_id'),
+            place=data.get('place'),
+            attendance=data.get('attendance')
         )
 
         actual = user_data.user_data()
