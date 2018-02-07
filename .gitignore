@@ -4,6 +4,8 @@
 /tmp/
 __pycache__/
 .cache/
+.venv3
+*pytest_cache
 *.pyc
 .coverage
 template.yml
