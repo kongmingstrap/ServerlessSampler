@@ -11,8 +11,9 @@ class AttendanceRepository(object):
         put table
         """
 
+        table = self.dynamodb.Table(os.environ['USER_TABLE_NAME'])
+
         try:
-            table = self.dynamodb.Table(os.environ['USER_TABLE_NAME'])
             table.put_item(Item=data)
         except Exception as e:
-            print('Exception: {e}'.format(e))
+            print(f'Exception: {e}')

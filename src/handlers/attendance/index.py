@@ -9,6 +9,6 @@ def handler(event, context):
         user = UserFactory().from_event(event)
         AttendanceService().send_report(user)
     else:
-        print('Method Not Allowed: {method}'.format(method=http_method))
+        print(f'Method Not Allowed: {http_method}')
 
     return {}

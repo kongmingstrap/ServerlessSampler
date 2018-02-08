@@ -11,11 +11,12 @@ class UsersRepository(object):
         put table
         """
 
+        table = self.dynamodb.Table(os.environ['USER_TABLE_NAME'])
+
         try:
-            table = self.dynamodb.Table(os.environ['USER_TABLE_NAME'])
             response = table.scan()
             users = response.get('Items')
 
             return users
         except Exception as e:
-            print('Exception: {e}'.format(e))
+            print(f'Exception: {e}')
