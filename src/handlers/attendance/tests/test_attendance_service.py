@@ -1,8 +1,8 @@
 import pytest
 
+from user import User
 from attendance_service import AttendanceService
 from attendance_repository import AttendanceRepository
-from user import User
 
 
 class TestAttendanceService(object):
