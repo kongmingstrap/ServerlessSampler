@@ -3,8 +3,9 @@ sampler-cfn
 
 # requirements
 
+- [AWS CLI](https://aws.amazon.com/cli/)
 - [Docker for Mac](https://www.docker.com/docker-mac)
-- yarn
+- [yarn](https://yarnpkg.com)
 
 # Setting
 ```bash
