@@ -74,6 +74,14 @@ Resources:
                   - s3:ListBucket
                   - s3:ListBucketMultipartUploads
                   - s3:PutObject
-                Resource: !Sub
-                  - ${AttendanceDataBucketArn}/*
-                  - {AttendanceDataBucketArn: !ImportValue sampler-s3-AttendanceDataBucketArn}
+                Resource:
+                  - Fn::Join:
+                    - ""
+                    - - Fn::ImportValue: sampler-s3-AttendanceDataBucketArn
+                      - /*
+
+Outputs:
+  AttendanceDataStream:
+    Value: !Ref AttendanceDataStream
+    Export:
+      Name: !Sub ${AWS::StackName}-AttendanceDataStreamName
