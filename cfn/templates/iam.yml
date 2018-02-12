@@ -98,6 +98,40 @@ Resources:
                   - s3:GetObject
                 Resource: "*"
 
+  SummaryAttendanceHistoryRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: sampler-summary-attendance-history-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Path: !Sub /${AWS::StackName}/
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: sampler-summary-attendance-history-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:AbortMultipartUpload
+                  - s3:GetBucketLocation
+                  - s3:GetObject
+                  - s3:ListBucket
+                  - s3:ListBucketMultipartUploads
+                  - s3:PutObject
+                Resource:
+                  - Fn::ImportValue: sampler-s3-HistoryDataBucketArn
+                  - Fn::Join:
+                    - ""
+                    - - Fn::ImportValue: sampler-s3-HistoryDataBucketArn
+                      - /*
+
 Outputs:
   PutAttendanceRoleArn:
     Value: !GetAtt PutAttendanceRole.Arn
@@ -111,5 +145,9 @@ Outputs:
     Value: !GetAtt ContributeAttendancesRole.Arn
     Export:
       Name: !Sub ${AWS::StackName}-ContributeAttendancesRoleArn
+  SummaryAttendanceHistoryRoleArn:
+    Value: !GetAtt SummaryAttendanceHistoryRole.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-SummaryAttendanceHistoryRoleArn
   SAMDeployRoleArn:
     Value: !GetAtt SAMDeployRole.Arn
