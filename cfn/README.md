@@ -1,7 +1,7 @@
 sampler-cfn
 =======
 
-# requirements
+# Requirements
 
 - [AWS CLI](https://aws.amazon.com/cli/)
 - [Docker for Mac](https://www.docker.com/docker-mac)
@@ -14,7 +14,7 @@ $ yarn install
 
 # Deploy
 
-## 1. configure AWS credentials
+## 1. Configure AWS credentials
 
 - `~/.aws/credentials`
 

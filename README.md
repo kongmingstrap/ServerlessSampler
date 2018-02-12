@@ -1,20 +1,20 @@
 ServerlessSampler
 =======
 
-# requirements
+# Requirements
 
 - [AWS CLI](https://aws.amazon.com/cli/)
 - [Docker for Mac](https://www.docker.com/docker-mac)
 
-## development
+## Development
 
 - [pyenv](https://github.com/pyenv/pyenv)
 - [localstack](https://github.com/localstack/localstack)
 
-# architecture
+# Architecture
 ![architecture](https://github.com/kongmingstrap/ServerlessSampler/blob/master/architecture.png "architecture")
 
-# setting
+# Setting
 
 ## 1. Python
 
@@ -38,33 +38,33 @@ $ pip install pipenv
 $ pipenv install
 ```
 
-## 2. start localstack
+## 2. Start localstack
 
 ```shell
 $ make localstack-up
 ```
 
-## 3. stop localstack
+## 3. Stop localstack
 
 ```shell
 $ make localstack-stop
 ```
 
-# code style check
+# Code style check
 
 ```shell
 $ make lint
 ```
 
-# test
+# Unit test
 
 ```shell
 $ make unit-test
 ```
 
-# deploy
+# Deploy
 
-## 1. configure AWS credentials
+## 1. Configure AWS credentials
 
 - `~/.aws/credentials`
 
