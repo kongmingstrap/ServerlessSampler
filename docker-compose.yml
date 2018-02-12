@@ -5,10 +5,9 @@ services:
     container_name: sampler_localstack
     image: atlassianlabs/localstack
     ports:
-      - 4567:4568
-      - 4569:4569
-      - 4576:4576
-      - 8080:8080
+      - "4569:4569"
+      - "4572:4572"
+      - "4575:4575"
     environment:
       - SERVICES=kinesis,dynamodb,s3
       - DEFAULT_REGION=ap-northeast-1
